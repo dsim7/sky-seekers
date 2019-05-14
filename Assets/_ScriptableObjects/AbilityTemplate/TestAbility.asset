@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9c4f714132bb0f42b25e8b77e8808bb, type: 3}
+  m_Name: TestAbility
+  m_EditorClassIdentifier: 
+  actions:
+  - {fileID: 11400000, guid: fd04631b7be8dd742aaaa3cf83d421a5, type: 2}
+  - {fileID: 11400000, guid: ebb02ad057707314082b0ff5a48b3e10, type: 2}
+  targeting: {fileID: 11400000, guid: b80cef9394955404599a3d6f6f94651c, type: 2}
+  cooldown: 0
+  type: {fileID: 11400000, guid: 5fa5d7e748952a749907ebf3cfeb283b, type: 2}
+  actionPointCost: 1
+  isMelee: 1
+  flags: 0

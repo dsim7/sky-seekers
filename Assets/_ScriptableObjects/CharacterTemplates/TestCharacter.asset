@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5b09508db1f1904c93e7cdb2d230869, type: 3}
+  m_Name: TestCharacter
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  attack: 10
+  defense: 1
+  spellpower: 10
+  abilities:
+  - {fileID: 11400000, guid: 7929964cacdcd1c49a27beb98613ea5c, type: 2}
+  startingActionPoints: 3
