@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [CreateAssetMenu]
 public class StatusEffectTemplate : ScriptableObject
@@ -13,7 +14,7 @@ public class StatusEffectTemplate : ScriptableObject
     bool stacks;
     [Header("Functional Effects")]
     [SerializeField]
-    PassiveEffect[] persistentEffects;
+    ModifierGenerator[] modifiers;
     [Space]
     [SerializeField]
     AbilityOnHitEffect[] onApply;
@@ -23,23 +24,23 @@ public class StatusEffectTemplate : ScriptableObject
     AbilityOnHitEffect[] onTick;
     [Header("Special Effects")]
     [SerializeField]
-    SpecialEffectPoolRef[] persistentSfx;
+    SpecialEffectGenerator[] persistentSfx;
     [SerializeField]
-    SpecialEffectPoolRef[] onApplySfx;
+    SpecialEffectGenerator[] onApplySfx;
     [SerializeField]
-    SpecialEffectPoolRef[] onTickSfx;
+    SpecialEffectGenerator[] onTickSfx;
     [SerializeField]
-    SpecialEffectPoolRef[] onRemoveSfx;
+    SpecialEffectGenerator[] onRemoveSfx;
 
     public int Duration => duration;
     public int TickRate => tickRate;
     public bool Stacks => stacks;
-    public PassiveEffect[] PassiveEffects => persistentEffects;
+    public ModifierGenerator[] Modifiers => modifiers;
     public AbilityOnHitEffect[] OnApply => onApply;
     public AbilityOnHitEffect[] OnRemove => onRemove;
     public AbilityOnHitEffect[] OnTick => onTick;
-    public SpecialEffectPoolRef[] PersistentSFX => persistentSfx;
-    public SpecialEffectPoolRef[] OnApplySFX => onApplySfx;
-    public SpecialEffectPoolRef[] OnTickSFX => onTickSfx;
-    public SpecialEffectPoolRef[] OnRemoveSFX => onRemoveSfx;
+    public SpecialEffectGenerator[] PersistentSFX => persistentSfx;
+    public SpecialEffectGenerator[] OnApplySFX => onApplySfx;
+    public SpecialEffectGenerator[] OnTickSFX => onTickSfx;
+    public SpecialEffectGenerator[] OnRemoveSFX => onRemoveSfx;
 }

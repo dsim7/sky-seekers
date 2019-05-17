@@ -2,55 +2,60 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Ability
 {
+    CharacterAbilityHandler abilityHandler;
+    public CharacterAbilityHandler AbilityHandler => abilityHandler;
+    
     AbilityTemplate template;
-    AbilityCooldown cooldown;
-    int actionPointCost;
-    bool beingCast;
-
     public AbilityTemplate Template => template;
-    public AbilityCooldown Cooldown => cooldown;
-    public int ActionPointCost => actionPointCost;
-    public bool BeingCast => beingCast;
 
-    public Ability(AbilityTemplate template)
+    AbilityCooldown cooldown;
+    public AbilityCooldown Cooldown => cooldown;
+
+    AbilityInstance currentCast;
+
+    BoolVariable canCast = new BoolVariable();
+    public bool CanCast => canCast.Value;
+    public void ListenToCanCast(UnityAction listener) { canCast.RegisterPostchangeEvent(listener); }
+    public void UnlistenToCanCast(UnityAction listener) { canCast.UnregisterPostchangeEvent(listener); }
+
+    public Ability(AbilityTemplate template, CharacterAbilityHandler abilityHandler)
     {
         this.template = template;
-        actionPointCost = template.ActionPointCost;
-
+        this.abilityHandler = abilityHandler;
+        
         cooldown = new AbilityCooldown(template.Cooldown);
+        RegisterCanCastListeners();
     }
 
-    public AbilityInstance Cast(Character caster, List<Character> AItargets = null)
+    public AbilityInstance GetNewInstance(Character caster)
     {
-        if (!cooldown.IsOffCD)
-        {
-            return null;
-        }
-        
-        beingCast = true;
-        AbilityInstance abilityInstance = AbilityInstance.NewAbility(this, caster);
+        currentCast = AbilityInstance.NewAbility(this, caster);
+        return currentCast;
+    }
 
+    public void StartCasting(TargetingAI aiTargeting = null)
+    {
         if (template.Targeting.IsAutoTarget)
         {
-            AutoTarget(abilityInstance);
-            Execute(abilityInstance);
+            AutoTarget(currentCast);
+            currentCast.Execute();
         }
         else
         {
-            if (caster.TeamHandler.Team.AI != null)
+            if (currentCast.Caster.AIHandler.IsAI)
             {
-                AITarget(abilityInstance, AItargets);
-                Execute(abilityInstance);
+                UseAITargets(currentCast, aiTargeting);
+                currentCast.Execute();
             }
             else
             {
-                ManualTarget(abilityInstance);
+                ManualTarget(currentCast);
             }
         }
-        return abilityInstance;
     }
 
     void AutoTarget(AbilityInstance abilityInstance)
@@ -58,13 +63,13 @@ public class Ability
         template.Targeting.AutoTarget(abilityInstance);
     }
 
-    void AITarget(AbilityInstance abilityInstance, List<Character> AItargets)
+    void UseAITargets(AbilityInstance abilityInstance, TargetingAI aiTargeting = null)
     {
-        if (AItargets == null)
+        if (aiTargeting == null)
         {
             return;
         }
-        abilityInstance.Targets.AddRange(AItargets);
+        abilityInstance.Targets.AddRange(aiTargeting.GetAITargets(abilityInstance));
         if (!abilityInstance.CheckTargets())
         {
             return;
@@ -73,21 +78,31 @@ public class Ability
 
     void ManualTarget(AbilityInstance abilityInstance)
     {
-        TargetingController targetingController = abilityInstance.Caster.TeamHandler.Team.TargetingController;
+        TargetingController targetingController = abilityInstance.Caster.Team.TargetingController;
 
         targetingController.ChooseNewTargets(Template.Targeting.NumTargetsRequired,
             character => Template.Targeting.SelectTargetCheck(character, abilityInstance),
             targets =>
             {
                 abilityInstance.Targets.AddRange(targets);
-                Execute(abilityInstance);
+                abilityInstance.Execute();
             },
             abilityInstance.Cancel);
     }
 
-    void Execute(AbilityInstance abilityInstance)
+    void RegisterCanCastListeners()
     {
-        abilityInstance.RegisterOnCompleteListener(() => beingCast = false);
-        abilityInstance.Execute();
+        abilityHandler.Character.ActionPointHandler.ListenToPoints(UpdateCanCast);
+        cooldown.ListenToCD(UpdateCanCast);
+    }
+
+    void UpdateCanCast()
+    {
+        bool results = abilityHandler.Character.ActionPointHandler.HavePoints(template.ActionPointCost) &&
+            cooldown.IsOffCD;
+        if (results != canCast.Value)
+        {
+            canCast.Value = results;
+        }
     }
 }

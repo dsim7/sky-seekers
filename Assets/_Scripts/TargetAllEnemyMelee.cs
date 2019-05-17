@@ -9,14 +9,9 @@ public class TargetAllEnemyMelee : AbilityTargeting
 {
     public override void AutoTarget(AbilityInstance abilityInstance)
     {
-        Character[] enemyCharacters = abilityInstance.Caster.TeamHandler.Team.EnemyTeam.Characters;
+        Character[] enemyCharacters = abilityInstance.Caster.Team.EnemyTeam.Characters;
         
         abilityInstance.Targets.AddRange(enemyCharacters.Where(
-            character => character.TeamHandler.Position == TeamPosition.Melee));
-    }
-
-    public override bool SelectTargetCheck(Character selected, AbilityInstance abilityInstance)
-    {
-        return true;
+            character => character.PositionHandler.Position == TeamPosition.Melee));
     }
 }

@@ -57,7 +57,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2404780652502176138}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.363, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.25048798, y: 0.25048798, z: 0.25048798}
   m_Children:
   - {fileID: 2404780651840132282}
@@ -201,9 +201,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2404780652765173082}
   - component: {fileID: 2404780652765173080}
-  - component: {fileID: 2404780652765173083}
   - component: {fileID: 2404780652765173081}
   - component: {fileID: 6674145323667942057}
+  - component: {fileID: 3651764969678647629}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -238,24 +238,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 499c5d8a7af23aa46957b9d01031e91c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 2404780652765173081}
-  mover: {fileID: 2404780652765173083}
---- !u!114 &2404780652765173083
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2404780652765173077}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98e4da5c09c06df479124e9c9954c0ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  anchor: {fileID: 0}
-  moveSpeed: 40
-  timeInMelee: 1
-  meleeDistance: 1
+  sprite: {fileID: 2404780652502176136}
+  actorSelector: {fileID: 0}
 --- !u!95 &2404780652765173081
 Animator:
   serializedVersion: 3
@@ -287,7 +271,21 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1.3241563, y: 1.3361158, z: 1}
-  m_Center: {x: -0.36277223, y: -0.007557392, z: 0}
+  m_Center: {x: 0, y: -0.007557392, z: 0}
+--- !u!114 &3651764969678647629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2404780652765173077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ea0b728e1fdedb4180b51ea9ab27d5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 20
+  meleeDistance: 1.5
 --- !u!1 &2404780652963640884
 GameObject:
   m_ObjectHideFlags: 0

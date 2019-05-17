@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5edd0a8045c5e4b4594b3eb422f0d37b, type: 3}
+  m_Name: TwinFangSecondHit
+  m_EditorClassIdentifier: 
+  animationName: 0
+  isMelee: 1
+  isAoe: 0
+  indexOfPrimaryTarget: 0
+  delayToNextAction: 1
+  effects:
+  - {fileID: 11400000, guid: 6a80d6ae0a822d840a4fa8bc2ba161eb, type: 2}
+  - {fileID: 11400000, guid: 0720bbb765d3c0e4ab6e590d1c1f8596, type: 2}
+  targetSfxs:
+  - {fileID: 11400000, guid: 48de1235cf66f59429673a92d60fe4d4, type: 2}
+  casterSfxs: []

@@ -30,9 +30,8 @@ public class CharacterStatusHandler : ObservedObject
         }
 
         StatusEffectInstance status = StatusEffectInstance.NewStatus(statusTemplate, owner, target);
-        statuses.Add(status);
+        target.StatusHandler.statuses.Add(status);
         status.OnApply();
-
         Changed();
     }
 

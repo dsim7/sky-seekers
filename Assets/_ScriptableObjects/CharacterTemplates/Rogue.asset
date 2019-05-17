@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5b09508db1f1904c93e7cdb2d230869, type: 3}
+  m_Name: Rogue
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  attack: 10
+  defense: 1
+  spellpower: 10
+  abilities:
+  - {fileID: 11400000, guid: 7929964cacdcd1c49a27beb98613ea5c, type: 2}
+  - {fileID: 11400000, guid: 0e644bd63fb090f428247729cb2e7fb9, type: 2}
+  - {fileID: 11400000, guid: efa36a77db10895438fc7e2e560d15d4, type: 2}
+  - {fileID: 11400000, guid: efa36a77db10895438fc7e2e560d15d4, type: 2}
+  - {fileID: 11400000, guid: 5247e38ef16bb7c40bb163219e146fc2, type: 2}
+  startingActionPoints: 2
+  ai: {fileID: 11400000, guid: b833ca7a11e7dfe4bae8e4132b323981, type: 2}

@@ -12,12 +12,12 @@ public class CharacterAPPanel : MonoBehaviour
     [SerializeField]
     Color filledIn, empty;
     
-    CharacterActionHandler action;
+    CharacterActionPointHandler action;
     
     void Start()
     {
-        action = characterPanel.Actor.Character.ActionHandler;
-        action.RegisterListener(UpdateInfo);
+        action = characterPanel.Actor.Character.ActionPointHandler;
+        action.ListenToPoints(UpdateInfo);
         UpdateInfo();
     }
 

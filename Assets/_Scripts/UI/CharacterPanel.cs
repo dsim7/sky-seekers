@@ -34,27 +34,30 @@ public class CharacterPanel : MonoBehaviour
     {
         sb = new StringBuilder();
         character = actor.Character;
-
+        
         character.HealthHandler.RegisterListener(UpdateHealth);
         UpdateHealth();
         
-        character.ActionHandler.RegisterListener(UpdateAPOrbs);
+        character.ActionPointHandler.ListenToPoints(UpdateAPOrbs);
         UpdateAPOrbs();
 
-        character.TeamHandler.RegisterListener(UpdatePosition);
+        character.PositionHandler.ListenToCanReposition(UpdateRepositionButton);
+        UpdateRepositionButton();
+
+        character.PositionHandler.ListenToPosition(UpdatePosition);
         UpdatePosition();
     }
 
     public void Reposition()
     {
-        actor.Character.TeamHandler.Reposition();
+        actor.Character.PositionHandler.Reposition();
     }
 
     void UpdateAPOrbs()
     {
         for (int i = 0; i < apOrbs.Length; i++)
         {
-            apOrbs[i].color = i < character.ActionHandler.Points ? filledIn : empty;
+            apOrbs[i].color = i < character.ActionPointHandler.Points ? filledIn : empty;
         }
     }
     
@@ -67,11 +70,14 @@ public class CharacterPanel : MonoBehaviour
         healthText.text = sb.Clear().Append(curHealth.ToString()).Append(" / ").Append(maxHealth).ToString();
     }
 
+    void UpdateRepositionButton()
+    {
+        repositionButton.interactable = character.PositionHandler.CanReposition;
+    }
+
     void UpdatePosition()
     {
-        positionText.text = character.TeamHandler.Position.ToString();
-
-        repositionButton.interactable = character.TeamHandler.CanReposition;
+        positionText.text = character.PositionHandler.Position.ToString();
     }
 
 }

@@ -32,6 +32,6 @@ public class CharacterHealthPanel : MonoBehaviour
         float maxHealth = health.MaxHealth;
         healthBar.fillAmount = curHealth / maxHealth;
 
-        healthText.text = sb.Clear().Append(curHealth.ToString()).Append(" / ").Append(maxHealth).ToString();
+        healthText.text = sb.Clear().Append(curHealth.ToString("#")).Append(" / ").Append(maxHealth).ToString();
     }
 }

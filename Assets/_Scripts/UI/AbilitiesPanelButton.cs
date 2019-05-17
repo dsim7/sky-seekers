@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class AbilitiesPanelButton : MonoBehaviour
 {
+    Button button;
+
     [SerializeField]
     TextMeshProUGUI buttonText;
 
@@ -16,17 +18,33 @@ public class AbilitiesPanelButton : MonoBehaviour
 
         set
         {
+            if (ability != null)
+            {
+                ability.UnlistenToCanCast(UpdateCanCast);
+            }
             ability = value;
             if (ability != null)
             {
-                gameObject.SetActive(true);
+                ability.ListenToCanCast(UpdateCanCast);
+                UpdateCanCast();
                 buttonText.text = ability.Template.name;
+                gameObject.SetActive(true);
             }
             else
             {
                 gameObject.SetActive(false);
             }
         }
+    }
+
+    void Start()
+    {
+        button = GetComponent<Button>();
+    }
+
+    void UpdateCanCast()
+    {
+        button.interactable = ability.CanCast;
     }
 
 }

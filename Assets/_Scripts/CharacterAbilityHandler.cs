@@ -1,14 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CharacterAbilityHandler
 {
     Character owner;
-    Dictionary<AbilityType, Ability> abilities;
+    public Character Character => owner;
+
+    BoolVariable casting = new BoolVariable();
+    public bool Casting => casting.Value;
+    public void ListenToCasting(UnityAction listener) { casting.RegisterPostchangeEvent(listener); }
+    public void UnlistenToCasting(UnityAction listener) { casting.UnregisterPostchangeEvent(listener); }
 
     public float Power { get; set; }
     public float SpellPower { get; set; }
+
+    Dictionary<AbilityType, Ability> abilities;
 
     public CharacterAbilityHandler(Character character)
     {
@@ -21,9 +29,12 @@ public class CharacterAbilityHandler
         {
             if (abilities.ContainsKey(template.Type))
             {
-                Debug.LogWarning("Character has multiple abilities of the same type. Replacing.");
+                Debug.LogError("Character has multiple abilities of the same type. Replacing. " + template.Type);
             }
-            abilities.Add(template.Type, new Ability(template));
+            else
+            {
+                abilities.Add(template.Type, new Ability(template, this));
+            }
         }
     }
 
@@ -36,27 +47,53 @@ public class CharacterAbilityHandler
         return null;
     }
 
-    public AbilityInstance CastAbility(AbilityType type, List<Character> AItargets = null)
+    public bool CastAbility(AbilityType abilityType, TargetingAI aiTargeting = null)
     {
-        if (type == null)
+        if (!owner.Available)
         {
-            Debug.LogWarning("No Ability Type");
-            return null;
+            Debug.Log("character busy, not active, or incapacitated");
+            return false;
+        }
+        if (casting.Value)
+        {
+            Debug.Log("already casting a spell");
+            return false;
         }
 
-        if (!abilities.ContainsKey(type))
-        { 
-            Debug.LogWarning("Ability Set does not contain " + type.name);
-            return null;
+        Ability ability = GetAbility(abilityType);
+        if (ability == null)
+        {
+            Debug.LogError("Ability doesn't exist");
+            return false;
         }
-        Ability ability = abilities[type];
-        return CastAbility(ability, AItargets);
-    }
+        if (!ability.CanCast)
+        {
+            Debug.Log("Ability can't cast");
+            return false;
+        }
 
-    public AbilityInstance CastAbility(Ability ability, List<Character> AItargets = null)
-    {
-        AbilityInstance abilityInstance = ability.Cast(owner, AItargets);
-        return abilityInstance;
+        AbilityInstance abInst = ability.GetNewInstance(owner);
+
+        abInst.OnStart.AddListener(() =>
+        {
+            casting.Value = true;
+            owner.ActionPointHandler.UseActionPoints(ability.Template.ActionPointCost);
+        });
+
+        abInst.OnComplete.AddListener(() => 
+        {
+            casting.Value = false;
+            owner.Mover.DoneInMelee();
+        });
+
+        abInst.OnCancel.AddListener(() =>
+        {
+            casting.Value = false;
+            owner.Mover.DoneInMelee();
+        });
+        
+        ability.StartCasting(aiTargeting);
+        return true;
     }
 
     public void TickCooldowns()

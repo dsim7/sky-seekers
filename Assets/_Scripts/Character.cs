@@ -6,170 +6,109 @@ using UnityEngine.Events;
 
 public class Character
 {
-    //public CharacterTemplate Template { get; private set; }
-    //public CharacterActor Actor { get; private set; }
-    //public CharacterTeamHandler TeamHandler { get; private set; }
-    //public CharacterAbilityHandler AbilityHandler { get; private set; }
-    //public CharacterEventHandler EventHandler { get; private set; }
-    //public CharacterStatusHandler StatusHandler { get; private set; }
-    //public CharacterHealthHandler HealthHandler { get; private set; }
-    //public CharacterActionHandler ActionHandler { get; private set; }
+    public CharacterTemplate Template { get; private set; }
+    public CharacterActor Actor { get; private set; }
+    public CharacterMover Mover { get; private set; }
+    public CharacterPositionHandler PositionHandler { get; private set; }
+    public CharacterAbilityHandler AbilityHandler { get; private set; }
+    public CharacterEventHandler EventHandler { get; private set; }
+    public CharacterStatusHandler StatusHandler { get; private set; }
+    public CharacterHealthHandler HealthHandler { get; private set; }
+    public CharacterActionPointHandler ActionPointHandler { get; private set; }
+    public CharacterAIHandler AIHandler { get; private set; }
 
-    CharacterTemplate template;
-    public CharacterTemplate Template => template;
-
-    CharacterActor actor;
-    public CharacterActor Actor => actor;
-
-    CharacterTeamHandler teamHandler;
-    public CharacterTeamHandler TeamHandler => teamHandler;
-
-    CharacterAbilityHandler abilityHandler;
-
-    CharacterEventHandler eventHandler;
-    public CharacterEventHandler EventHandler => eventHandler;
-
-    CharacterStatusHandler statusHandler;
-    public CharacterStatusHandler StatusHandler => statusHandler;
-
-    CharacterHealthHandler healthHandler;
-    public CharacterHealthHandler HealthHandler => healthHandler;
-
-    CharacterActionHandler actionHandler;
-    public CharacterActionHandler ActionHandler => actionHandler;
+    Team team;
+    public Team Team => team;
 
     float power, critChance, critMultiplier, defense;
-
-    bool busy;
-    public bool Busy => busy;
+    public float CritChance => critChance;
+    public float Power => power;
+    public float CritMultiplier => critMultiplier;
+    public float Defense => defense;
+    
+    int incapacitationCount;
+    public bool Incapacitated => incapacitationCount > 0;
     bool active;
-    public bool Active => active;
 
-    public Character(CharacterTemplate template, CharacterActor actor, Team team, TeamPosition position)
+    BoolVariable available = new BoolVariable();
+    public bool Available => available.Value;
+    public void ListenToAvailable(UnityAction listener) { available.RegisterPostchangeEvent(listener); }
+    public void UnlistenToAvailable(UnityAction listener) { available.UnregisterPostchangeEvent(listener); }
+
+    float threat;
+    public float Threat => threat;
+    float threatened;
+    public float Threatened => threatened;
+
+    public Character(CharacterTemplateSlot templateSlot, Team team, CharacterActor actor, CharacterMover mover)
     {
-        this.template = template;
-        this.actor = actor;
+        Debug.Log("making character");
+        Template = templateSlot.Template;
+        Actor = actor;
+        Mover = mover;
         actor.Character = this;
+        mover.Character = this;
+        this.team = team;
 
-        teamHandler = new CharacterTeamHandler(this, team, position);
-        abilityHandler = new CharacterAbilityHandler(this);
-        eventHandler = new CharacterEventHandler(this);
-        statusHandler = new CharacterStatusHandler(this);
-        healthHandler = new CharacterHealthHandler(this);
-        actionHandler = new CharacterActionHandler(this);
-    }
+        ActionPointHandler = new CharacterActionPointHandler(this);
+        PositionHandler = new CharacterPositionHandler(this, templateSlot.Position);
+        AbilityHandler = new CharacterAbilityHandler(this);
+        EventHandler = new CharacterEventHandler(this);
+        StatusHandler = new CharacterStatusHandler(this);
+        HealthHandler = new CharacterHealthHandler(this);
+        AIHandler = new CharacterAIHandler(this);
 
-    public bool AwaitingCommand()
-    {
-        return !busy && active;
+        RegisterAvailabilityListeners();
     }
 
     public void StartTurn()
     {
-        actionHandler.ResetActionPoints();
-        statusHandler.PerTurnStatuses();
-        abilityHandler.TickCooldowns();
-        busy = false;
+        ActionPointHandler.ResetActionPoints();
+        StatusHandler.PerTurnStatuses();
+        AbilityHandler.TickCooldowns();
         active = true;
+        UpdateAvailability();
     }
 
     public void FinishTurn()
     {
-        statusHandler.RemoveExpiredStatuses();
+        StatusHandler.RemoveExpiredStatuses();
         active = false;
+        UpdateAvailability();
     }
 
-    public Ability GetAbility(AbilityType type)
+    public void Incapacitate()
     {
-        return abilityHandler.GetAbility(type);
+        incapacitationCount++;
+        if (incapacitationCount == 1)
+        {
+            UpdateAvailability();
+        }
     }
 
-    public AbilityInstance CastAbility(AbilityType abilityType)
+    public void RemoveIncapacitation()
     {
-        Ability ability = abilityHandler.GetAbility(abilityType);
-        if (AwaitingCommand())
+        incapacitationCount--;
+        if (incapacitationCount == 0)
         {
-            if (actionHandler.HavePoints(ability.ActionPointCost))
-            {
-                busy = true;
-
-                AbilityInstance abInst = abilityHandler.CastAbility(ability);
-                if (abInst != null)
-                {
-                    abInst.RegisterOnStartListener(() =>
-                    {
-                        actionHandler.UseActionPoints(ability.ActionPointCost);
-                        abInst.Caster.eventHandler.CastAbility.Invoke(abInst);
-                        foreach (Character target in abInst.Targets)
-                        {
-                            target.eventHandler.TargetedByAbility.Invoke(abInst);
-                        }
-                    });
-                    abInst.RegisterOnCompleteListener(() =>
-                    {
-                        busy = false;
-                    });
-                    abInst.RegisterOnCancelListener(() => busy = false);
-                    return abInst;
-                }
-            }
-            else
-            {
-                Debug.Log("Not enough action points");
-            }
+            UpdateAvailability();
         }
-        return null;    
     }
 
-    public void DealDamage(DamageInstance dmgInst)
+    void RegisterAvailabilityListeners()
     {
-        Character target = dmgInst.Target;
+        AbilityHandler.ListenToCasting(UpdateAvailability);
+        PositionHandler.ListenToIsRepositioning(UpdateAvailability);
+    }
 
-        dmgInst.Amount *= Mathf.Clamp(1 + ((abilityHandler.Power - 10) * 0.075f), 0, Mathf.Infinity);
-
-        if (dmgInst.AttackType == null)
+    void UpdateAvailability()
+    {
+        bool result = !AbilityHandler.Casting && !PositionHandler.IsRepositioning && active && !Incapacitated;
+        if (result != available.Value)
         {
-            eventHandler.DealDamage.Invoke(dmgInst);
-            target.eventHandler.ReceiveDamage.Invoke(dmgInst);
-
-            target.healthHandler.Health -= dmgInst.Amount * dmgInst.Modifier;
-            return;
-        }
-
-        eventHandler.Attacking.Invoke(dmgInst);
-        target.eventHandler.Attacked.Invoke(dmgInst);
-
-        if (HelperMethods.CheckChance(critChance))
-        {
-            dmgInst.IsCrit = true;
-        }
-
-        if (!dmgInst.CannotBeDefended && dmgInst.IsDefended)
-        {
-            eventHandler.Defended.Invoke(dmgInst);
-            target.eventHandler.Defending.Invoke(dmgInst);
-        }
-
-        if (!dmgInst.CannotMiss && dmgInst.IsMiss)
-        {
-            eventHandler.Missed.Invoke(dmgInst);
-            target.eventHandler.Missing.Invoke(dmgInst);
-        }
-        else
-        {
-            if (!dmgInst.CannotCrit && dmgInst.IsCrit)
-            {
-                dmgInst.Amount *= critMultiplier;
-
-                eventHandler.Critted.Invoke(dmgInst);
-                target.eventHandler.Critting.Invoke(dmgInst);
-            }
-            eventHandler.DealDamage.Invoke(dmgInst);
-            target.eventHandler.ReceiveDamage.Invoke(dmgInst);
-
-            dmgInst.Amount -= healthHandler.Armor;
-            
-            target.healthHandler.Health -= dmgInst.Amount * dmgInst.Modifier;
+            available.Value = result;
         }
     }
 }
+
+public class CharacterEvent : UnityEvent<Character> { }

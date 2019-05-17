@@ -20,79 +20,64 @@ public class AbilityAction : ScriptableObject
     AbilityOnHitEffect[] effects;
     [Header("Special Effects")]
     [SerializeField]
-    SpecialEffectPoolRef[] targetSfxs;
+    SpecialEffectGenerator[] targetSfxs;
     [SerializeField]
-    SpecialEffectPoolRef[] casterSfxs;
+    SpecialEffectGenerator[] casterSfxs;
 
+    public string AnimationName => animationName;
+    public bool IsMelee => isMelee;
+    public int IndexOfPrimaryTarget => indexOfPrimaryTarget;
     public float DelayToNextAction => delayToNextAction;
 
-    public void DoAction(Character caster, Character[] targets)
+    public void DoAction(Character caster, List<Character> targets)
     {
-        if (isMelee)
-        {
-            caster.Actor.MoveToMelee(targets[indexOfPrimaryTarget].Actor);
-        }
-
-        if (animationName != default(string) && caster.Actor.HasAnimation(animationName))
-        {
-            caster.Actor.PlayAnimation(animationName);
-
-            caster.Actor.SetCurrentAnimationHitEffect(() =>
-            {
-                DoEffects(caster, targets);
-                DoSFXs(caster, targets);
-            });
-        }
-        else
-        {
-            DoEffects(caster, targets);
-            DoSFXs(caster, targets);
-        }
+        DoEffects(caster, targets);
+        DoSFXs(caster, targets);
     }
 
-    void DoEffects(Character caster, Character[] targets)
+    void DoEffects(Character caster, List<Character> targets)
     {
         if (isAoe)
         {
-            foreach (AbilityOnHitEffect effect in effects)
+            for (int i = 0; i < effects.Length; i++)
             {
-                foreach (Character target in targets)
+                for (int j = 0; j < targets.Count; j++)
                 {
-                    effect.TakeEffect(caster, target);
+                    effects[i].TakeEffect(caster, targets[j]);
                 }
             }
         }
         else
         {
-            foreach (AbilityOnHitEffect effect in effects)
+            for (int i = 0; i < effects.Length; i++)
             {
-                effect.TakeEffect(caster, targets[indexOfPrimaryTarget]);
+                effects[i].TakeEffect(caster, targets[indexOfPrimaryTarget]);
             }
         }
     }
 
-    void DoSFXs(Character caster, Character[] targets)
+    void DoSFXs(Character caster, List<Character> targets)
     {
-        foreach (SpecialEffectPoolRef sfx in casterSfxs)
+        for (int i = 0; i < casterSfxs.Length; i++)
         {
-            sfx.Value.GenerateSFX(caster.Actor.transform);
+            casterSfxs[i].Value.GenerateSFX(caster.Actor.transform);
         }
 
         if (isAoe)
         {
-            foreach (SpecialEffectPoolRef sfx in targetSfxs)
+            for (int i = 0; i < targetSfxs.Length; i++)
             {
-                foreach (Character target in targets)
+                for (int j = 0; j < targets.Count; j++)
                 {
-                    sfx.Value.GenerateSFX(target.Actor.transform);
+                    targetSfxs[i].Value.GenerateSFX(targets[j].Actor.transform);
                 }
             }
         }
         else
         {
-            foreach (SpecialEffectPoolRef sfx in targetSfxs)
+            for (int i = 0; i < targetSfxs.Length; i++)
             {
-                sfx.Value.GenerateSFX(targets[indexOfPrimaryTarget].Actor.transform);
+                targetSfxs[i].Value.GenerateSFX(targets[indexOfPrimaryTarget].Actor.transform);
             }
         }
     }

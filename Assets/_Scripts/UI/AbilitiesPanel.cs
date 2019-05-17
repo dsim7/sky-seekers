@@ -30,7 +30,7 @@ public class AbilitiesPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void CastAbility(int index)
     {
-        caster.CastAbility(abilityTypes[index]);
+        caster.AbilityHandler.CastAbility(abilityTypes[index]);
     }
 
     public void SetCaster(CharacterActor casterActor)
@@ -45,7 +45,7 @@ public class AbilitiesPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         {
             if (buttons[i] != null && abilityTypes[i] != null)
             {
-                buttons[i].Ability = caster.GetAbility(abilityTypes[i]);
+                buttons[i].Ability = caster.AbilityHandler.GetAbility(abilityTypes[i]);
             }
         }
     }

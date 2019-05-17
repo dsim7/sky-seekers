@@ -9,25 +9,25 @@ using UnityEngine.EventSystems;
 public class CharacterActor : MonoBehaviour, IPointerDownHandler
 {
     [SerializeField]
-    CharacterActorMover mover;
+    SpriteRenderer sprite;
     [Space]
     [SerializeField]
-    TargetingRaycaster actorSelector;
-    
-    public Character Character { get; set; }
-    public CharacterActorMover Mover => mover;
+    CharacterActorSelectEvent actorSelector;
+
+    Character owner;
+    public Character Character { get { return owner; } set { owner = value; owner.ListenToAvailable(UpdateSprite); } }
 
     Animator animator;
-    UnityAction currentAnimationHitEffect;
+    UnityAction onCurAnimationHit;
 
     void Start()
     {
         animator = GetComponent<Animator>();
     }
 
-    public void MoveToMelee(CharacterActor actor)
+    void UpdateSprite()
     {
-        mover.MoveToMelee(actor);
+        sprite.color = Character.Available ? Color.red : Color.blue;
     }
 
     public bool HasAnimation(string animationName)
@@ -40,15 +40,36 @@ public class CharacterActor : MonoBehaviour, IPointerDownHandler
         animator.SetTrigger(animationName);
     }
 
-    public void SetCurrentAnimationHitEffect(UnityAction effect)
-    {
-        currentAnimationHitEffect = effect;
-    }
-
     // Animation callback
     public void DoAnimationHitEffect()
     {
-        currentAnimationHitEffect.Invoke();
+        onCurAnimationHit.Invoke();
+    }
+
+    public void DoAction(AbilityActionInstance actInst)
+    {
+        string animName = actInst.Template.AnimationName;
+
+        if (actInst.Template.IsMelee)
+        {
+            Character.Mover.MoveToMelee(actInst.Targets[actInst.Template.IndexOfPrimaryTarget].Actor);
+        }
+
+        if (animName == default(string) || !HasAnimation(animName))
+        {
+            actInst.Template.DoAction(actInst.Caster, actInst.Targets);
+            actInst.GetActionCompleteEvent().Invoke();
+        }
+        else
+        {
+            PlayAnimation(animName);
+
+            onCurAnimationHit = () =>
+            {
+                actInst.Template.DoAction(actInst.Caster, actInst.Targets);
+                actInst.GetActionCompleteEvent().Invoke();
+            };
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData)

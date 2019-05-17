@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9c4f714132bb0f42b25e8b77e8808bb, type: 3}
+  m_Name: Twin Fang
+  m_EditorClassIdentifier: 
+  actions:
+  - {fileID: 11400000, guid: 6cf712597a9e429468bf52804e48327c, type: 2}
+  - {fileID: 11400000, guid: 4331aeaa154f7eb4892155e912f82f8e, type: 2}
+  targeting: {fileID: 11400000, guid: 6c8ae9e81c7d2ae44a421f9ceda61317, type: 2}
+  cooldown: 4
+  type: {fileID: 11400000, guid: e9e4b4ae69beeea4db287d133c156cbb, type: 2}
+  actionPointCost: 2
+  flags: 2

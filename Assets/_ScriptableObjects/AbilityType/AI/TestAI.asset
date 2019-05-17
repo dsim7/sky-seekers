@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85996ba785557c847911652d75d01191, type: 3}
+  m_Name: TestAI
+  m_EditorClassIdentifier: 
+  turnPriority: 0
+  preferMelee: 1
+  preferSupport: 0
+  positioningPrioritization: 1
+  abilityTypesPrioritized:
+  - {fileID: 11400000, guid: 5fa5d7e748952a749907ebf3cfeb283b, type: 2}
+  abilityPrioritization: 0.5
+  targeting: {fileID: 11400000, guid: d23f3a60455d6b542ad15ca8e25a9870, type: 2}

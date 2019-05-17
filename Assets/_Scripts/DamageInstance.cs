@@ -16,7 +16,14 @@ public class DamageInstance
     public bool CannotMiss;
     public AttackType AttackType;
     public DamageType DamageType;
+    
+    public void DoDamage()
+    {
+        Dealer.HealthHandler.DealDamage(this);
+        isActive = false;
+    }
 
+    #region Statics
     bool isActive = false;
 
     static List<DamageInstance> pool;
@@ -51,7 +58,7 @@ public class DamageInstance
         return result;
     }
 
-    public static DamageInstance NewAttack(Character dealer = null, Character target = null, float damage = 0, 
+    public static DamageInstance NewAttack(Character dealer = null, Character target = null, float damage = 0,
         DamageType damageType = null, AttackType attackType = null, float modifier = 1)
     {
         DamageInstance instance = GetNextInstance();
@@ -73,10 +80,5 @@ public class DamageInstance
     }
 
     DamageInstance() { }
-
-    public void DoDamage()
-    {
-        Dealer.DealDamage(this);
-        isActive = false;
-    }
+    #endregion
 }

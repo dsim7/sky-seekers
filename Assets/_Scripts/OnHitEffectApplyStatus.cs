@@ -8,9 +8,14 @@ public class OnHitEffectApplyStatus : AbilityOnHitEffect
 {
     [SerializeField]
     StatusEffectTemplate statusTemplate;
+    [SerializeField]
+    float chanceToApply = 1;
 
     public override void TakeEffect(Character caster, Character target)
     {
-        caster.StatusHandler.ApplyStatus(statusTemplate, target);
+        if (chanceToApply == 1 || HelperMethods.CheckChance(chanceToApply))
+        {
+            caster.StatusHandler.ApplyStatus(statusTemplate, target);
+        }
     }
 }

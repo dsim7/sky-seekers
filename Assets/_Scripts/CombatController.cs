@@ -13,25 +13,12 @@ public class CombatController : MonoBehaviour
     void Start()
     {
         currentTeamIndex = 0;
-        teams[currentTeamIndex].Active = true;
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            SwitchTurns();
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            teams[0].Characters[0].TeamHandler.Reposition();
-        }
+        teams[currentTeamIndex].StartTurn();
     }
     
-    public void SwitchTurns()
+    public void RotateTurns()
     {
-        teams[currentTeamIndex].Active = false;
         HelperMethods.CyclicalIncrement(ref currentTeamIndex, teams.Length);
-        teams[currentTeamIndex].Active = true;
+        teams[currentTeamIndex].StartTurn();
     }
 }

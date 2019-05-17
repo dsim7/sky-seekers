@@ -14,7 +14,7 @@ public class TeamAnchors : MonoBehaviour
         int numMelee = 0;
         for (int i = 0; i < team.Characters.Length; i++)
         {
-            if (team.Characters[i].TeamHandler.Position == TeamPosition.Melee)
+            if (team.Characters[i].PositionHandler.Position == TeamPosition.Melee)
                 numMelee++;
         }
 
@@ -41,13 +41,14 @@ public class TeamAnchors : MonoBehaviour
         int indexOfSupport = 0;
         for (int i = 0; i < team.Characters.Length; i++)
         {
-            if (team.Characters[i].TeamHandler.Position == TeamPosition.Melee)
+            if (team.Characters[i].PositionHandler.Position == TeamPosition.Melee)
             {
-                team.Characters[i].Actor.Mover.Anchor = meleeAnchors[indexOfMelee++];
+                Debug.Log(team.Characters[i].Mover);
+                team.Characters[i].Mover.Anchor = meleeAnchors[indexOfMelee++];
             }
             else
             {
-                team.Characters[i].Actor.Mover.Anchor = supportAnchors[indexOfSupport++];
+                team.Characters[i].Mover.Anchor = supportAnchors[indexOfSupport++];
             }
         }
     }

@@ -46,4 +46,57 @@ public class CharacterHealthHandler : ObservedObject
         Health = owner.Template.MaxHealth;
         Armor = owner.Template.Defense;
     }
+
+    public void DealDamage(DamageInstance dmgInst)
+    {
+        Character caster = dmgInst.Dealer;
+        Character target = dmgInst.Target;
+
+        dmgInst.Amount *= Mathf.Clamp(1 + ((caster.AbilityHandler.Power - 10) * 0.075f), 0, Mathf.Infinity);
+
+        if (dmgInst.AttackType == null)
+        {
+            caster.EventHandler.DealDamage.Invoke(dmgInst);
+            target.EventHandler.ReceiveDamage.Invoke(dmgInst);
+
+            target.HealthHandler.Health -= dmgInst.Amount * dmgInst.Modifier;
+            return;
+        }
+
+        caster.EventHandler.Attacking.Invoke(dmgInst);
+        target.EventHandler.Attacked.Invoke(dmgInst);
+
+        if (HelperMethods.CheckChance(caster.CritChance))
+        {
+            dmgInst.IsCrit = true;
+        }
+
+        if (!dmgInst.CannotBeDefended && dmgInst.IsDefended)
+        {
+            caster.EventHandler.Defended.Invoke(dmgInst);
+            target.EventHandler.Defending.Invoke(dmgInst);
+        }
+
+        if (!dmgInst.CannotMiss && dmgInst.IsMiss)
+        {
+            caster.EventHandler.Missed.Invoke(dmgInst);
+            target.EventHandler.Missing.Invoke(dmgInst);
+        }
+        else
+        {
+            if (!dmgInst.CannotCrit && dmgInst.IsCrit)
+            {
+                dmgInst.Amount *= caster.CritMultiplier;
+
+                caster.EventHandler.Critted.Invoke(dmgInst);
+                target.EventHandler.Critting.Invoke(dmgInst);
+            }
+            caster.EventHandler.DealDamage.Invoke(dmgInst);
+            target.EventHandler.ReceiveDamage.Invoke(dmgInst);
+
+            dmgInst.Amount -= caster.HealthHandler.Armor;
+
+            target.HealthHandler.Health -= dmgInst.Amount * dmgInst.Modifier;
+        }
+    }
 }

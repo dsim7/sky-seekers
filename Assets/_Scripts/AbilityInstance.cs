@@ -1,22 +1,78 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class AbilityInstance
 {
     Ability ability;
+    public Ability Ability => ability;
+
     Character caster;
+    public Character Caster => caster;
+
     List<Character> targets;
+    public List<Character> Targets => targets;
+
     UnityEvent onStart;
+    public UnityEvent OnStart => onStart;
+
     UnityEvent onComplete;
+    public UnityEvent OnComplete => onComplete;
+
     UnityEvent onCancel;
+    public UnityEvent OnCancel => onCancel;
+    
+    public bool CheckTargets()
+    {
+        return targets.Count >= ability.Template.Targeting.NumTargetsRequired;
+    }
+
+    public void Execute()
+    {
+        onStart.Invoke();
+        TriggerMods();
+        ability.Cooldown.StartCD();
+        
+        List<AbilityActionInstance> actionInsts = GenerateActionInstances();
+
+        ActionSeriesExecuter seriesExecuter = new ActionSeriesExecuter();
+        seriesExecuter.DoSeriesOfDelayedActions(actionInsts, () => 
+        {
+            onComplete.Invoke();
+            isActive = false;
+        });
+    }
+
+    public void Cancel()
+    {
+        onCancel.Invoke();
+        isActive = false;
+    }
+
+    void TriggerMods()
+    {
+        caster.EventHandler.CastAbility.Invoke(this);
+        foreach (Character target in targets)
+        {
+            target.EventHandler.TargetedByAbility.Invoke(this);
+        }
+    }
+
+    List<AbilityActionInstance> GenerateActionInstances()
+    {
+        List<AbilityActionInstance> actionInsts = new List<AbilityActionInstance>();
+        foreach (AbilityAction action in ability.Template.Actions)
+        {
+            actionInsts.Add(new AbilityActionInstance(action, caster, targets));
+        }
+        return actionInsts;
+    }
+
+    #region Statics
     bool isActive;
 
-    public Ability Ability => ability;
-    public Character Caster => caster;
-    public List<Character> Targets => targets;
-    
     static List<AbilityInstance> pool;
     static int poolIndex;
 
@@ -72,49 +128,5 @@ public class AbilityInstance
         onCancel = new UnityEvent();
     }
 
-    public bool CheckTargets()
-    {
-        return targets.Count >= ability.Template.Targeting.NumTargetsRequired;
-    }
-
-    public void RegisterOnStartListener(UnityAction onStart)
-    {
-        this.onStart.AddListener(onStart);
-    }
-
-    public void RegisterOnCompleteListener(UnityAction onComplete)
-    {
-        this.onComplete.AddListener(onComplete);
-    }
-
-    public void RegisterOnCancelListener(UnityAction onCancel)
-    {
-        this.onCancel.AddListener(onCancel);
-    }
-    
-    public void Execute()
-    {
-        onStart.Invoke();
-        ability.Cooldown.StartCD();
-        caster.Actor.StartCoroutine(DoActions());
-    }
-
-    public void Cancel()
-    {
-        onCancel.Invoke();
-        isActive = false;
-    }
-    
-    IEnumerator DoActions()
-    {
-        yield return null;
-        foreach (AbilityAction action in ability.Template.Actions)
-        {
-            action.DoAction(caster, targets.ToArray());
-            yield return new WaitForSeconds(action.DelayToNextAction);
-        }
-            
-        onComplete.Invoke();
-        isActive = false;
-    }
+    #endregion
 }

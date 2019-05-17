@@ -4,18 +4,121 @@ using UnityEngine;
 
 public class StatusEffectInstance
 {
-    StatusEffectTemplate template;
-    Character caster;
-    Character target;
-    List<SpecialEffect> persistentSfxList;
-    int currentDuration;
-    int currentTickTime;
-    bool isActive;
+    public StatusEffectTemplate Template { get; private set; }
+    public Character Caster { get; private set; }
+    public Character Target { get; private set; }
+    public StatusEffectData Data { get; private set; }
+    public int CurrentDuration { get; private set; }
+    public int CurrentTickTime { get; private set; }
 
-    public StatusEffectTemplate Template => template;
-    public Character Caster => caster;
-    public Character Target => target;
-    public int CurrentDuration => currentDuration;
+    List<ModifierBase> modifierList;
+    List<SpecialEffect> persistentSfxList;
+
+    public void OnApply(bool applyMods = true)
+    {
+        isActive = true;
+        CurrentDuration = Template.Duration;
+        CurrentTickTime = Template.TickRate;
+
+        DoEffects(Template.OnApply);
+        DoSFXs(Template.OnApplySFX);
+
+        if (applyMods)
+        {
+            foreach (ModifierGenerator mod in Template.Modifiers)
+            {
+                modifierList.Add(mod.GenerateInstance());
+            }
+
+            foreach (SpecialEffectGenerator sfxRef in Template.PersistentSFX)
+            {
+                SpecialEffect sfx = sfxRef.Value.GenerateSFX(Target.Actor.transform);
+                persistentSfxList.Add(sfx);
+            }
+
+            ManageModifiers(true);
+        }
+    }
+
+    public void PerTurn()
+    {
+        CurrentTickTime--;
+        if (Template.TickRate != 0 && CurrentTickTime <= 0)
+        {
+            DoEffects(Template.OnTick);
+            DoSFXs(Template.OnTickSFX);
+            CurrentTickTime = Template.TickRate;
+        }
+        CurrentDuration--;
+    }
+
+    public void OnRemove()
+    {
+        isActive = false;
+
+        DoEffects(Template.OnRemove);
+        DoSFXs(Template.OnRemoveSFX);
+        ManageModifiers(false);
+        
+        foreach (SpecialEffect sfx in persistentSfxList)
+        {
+            sfx.Stop();
+        }
+    }
+
+    public void Reset()
+    {
+        OnApply(false);
+    }
+
+    void DoEffects(AbilityOnHitEffect[] effectList)
+    {
+        foreach (AbilityOnHitEffect effect in effectList)
+        {
+            effect.TakeEffect(Caster, Target);
+        }
+    }
+
+    void ManageModifiers(bool applyOrRemove)
+    {
+        foreach (ModifierBase mod in modifierList)
+        {
+            if (applyOrRemove)
+            {
+                mod.Apply(Target, this);
+            }
+            else
+            {
+                mod.Remove();
+            }
+        }
+    }
+
+    void DoSFXs(SpecialEffectGenerator[] sfxList)
+    {
+        foreach (SpecialEffectGenerator sfxRef in sfxList)
+        {
+            SpecialEffect sfx = sfxRef.Value.GenerateSFX(Target.Actor.transform);
+        }
+    }
+
+    public class StatusEffectData
+    {
+        Dictionary<string, float> floatData = new Dictionary<string, float>();
+        
+        public float GetFloat(string name)
+        {
+            return floatData.ContainsKey(name) ? floatData[name] : float.NaN;
+        }
+
+        public void Reset()
+        {
+            floatData.Clear();
+        }
+    }
+
+    #region Statics
+    bool isActive;
 
     static List<StatusEffectInstance> pool;
     static int poolIndex;
@@ -52,102 +155,20 @@ public class StatusEffectInstance
     public static StatusEffectInstance NewStatus(StatusEffectTemplate template = null, Character caster = null, Character target = null)
     {
         StatusEffectInstance instance = GetNextInstance();
-        instance.template = template;
-        instance.caster = caster;
-        instance.target = target;
+        instance.Template = template;
+        instance.Caster = caster;
+        instance.Target = target;
+        instance.Data.Reset();
+        instance.modifierList.Clear();
+        instance.persistentSfxList.Clear();
         return instance;
     }
 
-    StatusEffectInstance(StatusEffectTemplate template = null, Character caster = null, Character target = null)
+    StatusEffectInstance()
     {
-        this.template = template;
-        this.caster = caster;
-        this.target = target;
-
+        Data = new StatusEffectData();
+        modifierList = new List<ModifierBase>();
         persistentSfxList = new List<SpecialEffect>();
     }
-
-    public void OnApply(bool applyPassives = true)
-    {
-        isActive = true;
-        currentDuration = template.Duration;
-        currentTickTime = template.TickRate;
-
-        DoEffects(template.OnApply);
-        DoSFXs(template.OnApplySFX);
-
-        if (applyPassives)
-        {
-            ApplyPassiveEffects(template.PassiveEffects, true);
-        }
-
-        foreach (SpecialEffectPoolRef sfxRef in template.PersistentSFX)
-        {
-            SpecialEffect sfx = sfxRef.Value.GenerateSFX(target.Actor.transform);
-            persistentSfxList.Add(sfx);
-        }
-    }
-
-    public void PerTurn()
-    {
-        currentTickTime--;
-        if (template.TickRate != 0 && currentTickTime <= 0)
-        {
-            DoEffects(template.OnTick);
-            DoSFXs(template.OnTickSFX);
-            currentTickTime = template.TickRate;
-        }
-        currentDuration--;
-    }
-
-    public void OnRemove()
-    {
-        isActive = false;
-
-        DoEffects(template.OnRemove);
-        DoSFXs(template.OnRemoveSFX);
-        ApplyPassiveEffects(template.PassiveEffects, false);
-
-        foreach (SpecialEffect sfx in persistentSfxList)
-        {
-            sfx.Stop();
-        }
-    }
-
-    public void Reset()
-    {
-        OnApply(false);
-    }
-
-    void DoEffects(AbilityOnHitEffect[] effectList)
-    {
-        foreach (AbilityOnHitEffect effect in effectList)
-        {
-            effect.TakeEffect(caster, target);
-        }
-    }
-
-    void ApplyPassiveEffects(PassiveEffect[] passivesList, bool applyOrRemove)
-    {
-        foreach (PassiveEffect passive in passivesList)
-        {
-            if (applyOrRemove)
-            {
-                passive.Apply(Target);
-            }
-            else
-            {
-                passive.Remove(Target);
-            }
-        }
-    }
-
-    void DoSFXs(SpecialEffectPoolRef[] sfxList)
-    {
-        foreach (SpecialEffectPoolRef sfxRef in sfxList)
-        {
-            SpecialEffect sfx = sfxRef.Value.GenerateSFX(target.Actor.transform);
-        }
-        persistentSfxList.Clear();
-    }
+    #endregion
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpecialEffectPool : MonoBehaviour
 {
     [SerializeField]
-    SpecialEffectPoolRef reference;
+    SpecialEffectGenerator reference;
     [SerializeField]
     SpecialEffect sfxPrefab;
 

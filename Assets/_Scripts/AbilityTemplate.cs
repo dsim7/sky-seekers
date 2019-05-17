@@ -15,8 +15,6 @@ public class AbilityTemplate : ScriptableObject
     [SerializeField]
     int actionPointCost;
     [SerializeField]
-    bool isMelee;
-    [SerializeField]
     AbilityFlag flags;
 
     public AbilityAction[] Actions => actions;

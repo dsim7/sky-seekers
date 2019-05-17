@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterSlots:
   - template: {fileID: 11400000, guid: 786239baa92c7f44b93eb9a7ff1c29c7, type: 2}
-    position: 1
+    position: 0
   - template: {fileID: 11400000, guid: 786239baa92c7f44b93eb9a7ff1c29c7, type: 2}
     position: 1
   - template: {fileID: 11400000, guid: 786239baa92c7f44b93eb9a7ff1c29c7, type: 2}
     position: 0
+  isAIControlled: 1

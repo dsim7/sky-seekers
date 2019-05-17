@@ -11,6 +11,8 @@ public class CharacterTemplate : ScriptableObject
     List<AbilityTemplate> abilities;
     [SerializeField]
     int startingActionPoints;
+    [SerializeField]
+    CharacterAI ai;
     
     public float MaxHealth => maxHealth;
     public float Attack => attack;
@@ -18,4 +20,5 @@ public class CharacterTemplate : ScriptableObject
     public float Spellpower => spellpower;
     public List<AbilityTemplate> Abilities => abilities;
     public int StartingActionPoints => startingActionPoints;
+    public CharacterAI AI => ai;
 }

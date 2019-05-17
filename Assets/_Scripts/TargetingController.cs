@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class TargetingController : MonoBehaviour
 {
     [SerializeField]
-    TargetingRaycaster controls;
+    CharacterActorSelectEvent controls;
     [SerializeField]
     Texture2D targetingTexture;
 
@@ -47,7 +47,7 @@ public class TargetingController : MonoBehaviour
 
     void Update()
     {
-        if (targeting && Input.GetKeyDown(KeyCode.Escape))
+        if (targeting && (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1)))
         {
             CancelTargeting();
         }

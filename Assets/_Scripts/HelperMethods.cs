@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -21,7 +22,17 @@ public static class HelperMethods
         }
     }
 
-    public static void UpdateTimer(ref float timer, float timerEnd, UnityAction action)
+    public static void UpdateTimerOnce(ref float timer, float timerEnd, UnityAction action)
+    {
+        timer += Time.deltaTime;
+        if (timer >= timerEnd)
+        {
+            timer = 0;
+            action.Invoke();
+        }
+    }
+
+    public static void UpdateTimerRepeat(ref float timer, float timerEnd, UnityAction action)
     {
         timer += Time.deltaTime;
         while (timer > timerEnd)
@@ -31,7 +42,7 @@ public static class HelperMethods
         }
     }
 
-    public static void UpdateTimerUnscaled(ref float timer, float timerEnd, UnityAction action)
+    public static void UpdateTimerRepeatUnscaled(ref float timer, float timerEnd, UnityAction action)
     {
         timer += Time.unscaledDeltaTime;
         while (timer > timerEnd)
@@ -54,6 +65,101 @@ public static class HelperMethods
 
     public static bool CheckChance(float threshold)
     {
-        return Random.Range(0, 1f) <= threshold;
+        return UnityEngine.Random.Range(0, 1f) <= threshold;
+    }
+
+    public static void WaitUntil(OneTimeEvent evnt, UnityAction action)
+    {
+        evnt.AddListener(action);
+    }
+
+    public static void WaitThen(float howLong, UnityAction action)
+    {
+        Timer.GetInstance(howLong, action, false).Start();
+    }
+
+    public static Timer Loop(float interval, UnityAction action)
+    {
+        Timer result = Timer.GetInstance(interval, action, true);
+        result.Start();
+        return result;
+    }
+}
+
+
+public class ActionSeriesExecuter
+{
+    Timer timer;
+
+    public void DoSeriesOfDelayedActions<T>(List<T> actions, UnityAction onComplete) where T : IProlongedAction
+    {
+        timer = Timer.GetInstance();
+        timer.Looping = true;
+
+        for (int i = 0; i < actions.Count; i++)
+        {
+            T action = actions[i];
+            T nextAction = i + 1 < actions.Count ? actions[i + 1] : default(T);
+            action.GetActionCompleteEvent().AddListener(() =>
+            {
+                timer.Interval = action.GetPostActionDelay();
+                
+                if (nextAction != null)
+                {
+                    timer.OnComplete = () =>
+                    {
+                        timer.Stop();
+                        action.GetActionPostCompleteEvent().Invoke();
+                        nextAction.StartAction();
+                    };
+                }
+                else
+                {
+                    timer.Looping = false;
+                    timer.DisposeWhenDone();
+                    timer.OnComplete = () =>
+                    {
+                        action.GetActionPostCompleteEvent().Invoke();
+                        onComplete.Invoke();
+                    };
+                }
+
+                timer.Start();
+            });
+        }
+        
+        actions[0].StartAction();
+    }
+}
+
+public interface IProlongedAction
+{
+    void StartAction();
+
+    OneTimeEvent GetActionCompleteEvent();
+
+    float GetPostActionDelay();
+
+    OneTimeEvent GetActionPostCompleteEvent();
+}
+
+public class OneTimeEvent
+{
+    UnityEvent evnt = new UnityEvent();
+
+    public void AddListener(UnityAction listener)
+    {
+        evnt.AddListener(listener);
+    }
+
+    public void RemoveListener(UnityAction listener)
+    {
+        evnt.AddListener(listener);
+    }
+
+    public void Invoke()
+    {
+        evnt.Invoke();
+        evnt.RemoveAllListeners();
     }
 }
