@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 460fd312ebcf88d4f897fb5895c769d7, type: 3}
+  m_Name: CheapShotStatus
+  m_EditorClassIdentifier: 
+  duration: 2
+  tickRate: 0
+  allowMultiple: 0
+  maxStacks: 1
+  startingStacks: 1
+  modifiers: []
+  onApply:
+  - {fileID: 11400000, guid: d8452aa1458956e42b946eb9d4263ee2, type: 2}
+  onRemove:
+  - {fileID: 11400000, guid: 528d3641c5627984c83fca1c43b6a383, type: 2}
+  onTick: []
+  persistentSfx: []
+  onApplySfx: []
+  onTickSfx: []
+  onRemoveSfx: []

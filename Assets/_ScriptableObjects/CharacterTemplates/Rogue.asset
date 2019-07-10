@@ -17,10 +17,16 @@ MonoBehaviour:
   defense: 1
   spellpower: 10
   abilities:
-  - {fileID: 11400000, guid: 7929964cacdcd1c49a27beb98613ea5c, type: 2}
-  - {fileID: 11400000, guid: 0e644bd63fb090f428247729cb2e7fb9, type: 2}
+  - {fileID: 11400000, guid: 018450fa31353594ca20af32a7ccfe77, type: 2}
   - {fileID: 11400000, guid: efa36a77db10895438fc7e2e560d15d4, type: 2}
-  - {fileID: 11400000, guid: efa36a77db10895438fc7e2e560d15d4, type: 2}
-  - {fileID: 11400000, guid: 5247e38ef16bb7c40bb163219e146fc2, type: 2}
+  - {fileID: 11400000, guid: 89dc361eca682e545978055aa680dee1, type: 2}
+  - {fileID: 11400000, guid: 93a0214f2a78e5b4390883c07c11406f, type: 2}
+  - {fileID: 11400000, guid: 359f59fa8a5d7e145b8f9acc98b311c8, type: 2}
+  - {fileID: 11400000, guid: b2f1a0767d576a84f83f3143c79d6135, type: 2}
+  - {fileID: 11400000, guid: e5e9d287659ca5a499aff1981b7d03c8, type: 2}
+  - {fileID: 11400000, guid: dc178941c49397e4aba456f50e963020, type: 2}
+  - {fileID: 11400000, guid: ed220f15768a2eb47be7dd272cb2ce62, type: 2}
+  - {fileID: 11400000, guid: 6660c8e512e1b894f9afb769ab3e05f9, type: 2}
+  - {fileID: 11400000, guid: bb9581a4a8d10034d96c6d69fb92fd5b, type: 2}
   startingActionPoints: 2
   ai: {fileID: 11400000, guid: b833ca7a11e7dfe4bae8e4132b323981, type: 2}

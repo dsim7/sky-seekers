@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstPriority: 1
   secondPriority: 2
+  priorityDeviation: 0

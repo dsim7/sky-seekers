@@ -55,9 +55,9 @@ public class TargetingController : MonoBehaviour
 
     void SelectTarget(CharacterActor selected)
     {
-        if (targeting = true && targetChecker != null && targetChecker(selected.Character))
+        if (targeting = true && targetChecker != null && targetChecker(selected.Owner))
         {
-            selectedChars.Add(selected.Character);
+            selectedChars.Add(selected.Owner);
             if (selectedChars.Count >= numOfTargetsSelecting)
             {
                 onComplete.Invoke(selectedChars);

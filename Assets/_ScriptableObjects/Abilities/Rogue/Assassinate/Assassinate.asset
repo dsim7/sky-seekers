@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9c4f714132bb0f42b25e8b77e8808bb, type: 3}
+  m_Name: Assassinate
+  m_EditorClassIdentifier: 
+  actions:
+  - {fileID: 11400000, guid: c9d81c8452814654b8c977a9c58ad310, type: 2}
+  targeting: {fileID: 11400000, guid: bd8f131dab67d774c8a47896e9cdf10c, type: 2}
+  cooldown: 5
+  type: {fileID: 11400000, guid: 739fa7d95c87b764ea0f597607c8c511, type: 2}
+  actionPointCost: 2
+  mustBeAbleToReposition: 0
+  flags: 0
+  description: A Heavy attack on an enemy dealing Physical damage. Critical hits deal
+    3 times damage. 5 turn cooldown. 2 AP.

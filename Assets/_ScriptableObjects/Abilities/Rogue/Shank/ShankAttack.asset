@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efd65186a0f1f08498da8162e4e68dac, type: 3}
+  m_Name: ShankAttack
+  m_EditorClassIdentifier: 
+  baseDamage: 7
+  powerScaling: 1
+  attackType: {fileID: 11400000, guid: 802bb94fad82ad34e8efa2003f48fb72, type: 2}
+  damageType: {fileID: 11400000, guid: f7d5092f9adbcf74487bd98af86786b3, type: 2}
+  effectOnHit: {fileID: 0}
+  critChanceOverride: -1
+  critMultiplierOverride: -1

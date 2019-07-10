@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9c4f714132bb0f42b25e8b77e8808bb, type: 3}
+  m_Name: Shank
+  m_EditorClassIdentifier: 
+  actions:
+  - {fileID: 11400000, guid: f7e1c0943733929438a4159f1ab0e12b, type: 2}
+  targeting: {fileID: 11400000, guid: 46e245410d8be4548874ada7d8ec283c, type: 2}
+  cooldown: 0
+  type: {fileID: 11400000, guid: 5fa5d7e748952a749907ebf3cfeb283b, type: 2}
+  actionPointCost: 1
+  mustBeAbleToReposition: 0
+  flags: 0
+  description: A Light attack on a Melee enemy dealing Physical damage. Guaranteed
+    critical hits on Incapacitated targets. 0 turn cooldown. 1 AP.

@@ -9,15 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 434e202a22633a348981f599c98caac0, type: 3}
+  m_Script: {fileID: 11500000, guid: a6dd6abcae557d148949429427f94a91, type: 3}
   m_Name: 1Ally
   m_EditorClassIdentifier: 
-  instantExecution: 0
   requiredTargets: 1
   canSelectAllies: 1
   canSelectEnemies: 0
-  canSelectSelf: 1
   canSelectMelee: 1
   canSelectSupport: 1
+  cannotSelectSelf: 0
   cannotSelectLastMelee: 0
   cannotRepeatSelection: 0

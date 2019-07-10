@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actions:
   - {fileID: 11400000, guid: 3cd56a821e5e33d4ba71b4dd326fabb5, type: 2}
-  targeting: {fileID: 11400000, guid: b789934cd943d70439cae042deb023f7, type: 2}
+  targeting: {fileID: 11400000, guid: 21c6e7ae408a1cc4d9c17e7a359ff1aa, type: 2}
   cooldown: 0
-  type: {fileID: 11400000, guid: 76ed5aa31939c34439dd11b0d7222a6d, type: 2}
+  type: {fileID: 11400000, guid: d688fd8e8d13264468a4b740d54f400c, type: 2}
   actionPointCost: 1
+  mustBeAbleToReposition: 0
   flags: 2
+  description: A Light attack on a Support enemy dealing Physical damage. 0 turn cooldown.
+    1 AP.

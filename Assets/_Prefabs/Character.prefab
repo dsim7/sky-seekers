@@ -204,6 +204,7 @@ GameObject:
   - component: {fileID: 2404780652765173081}
   - component: {fileID: 6674145323667942057}
   - component: {fileID: 3651764969678647629}
+  - component: {fileID: 568187518680935730}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -284,8 +285,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ea0b728e1fdedb4180b51ea9ab27d5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 20
-  meleeDistance: 1.5
+--- !u!114 &568187518680935730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2404780652765173077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efa56f5be4e91384fb239d1dabdba712, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolRef: {fileID: 11400000, guid: 09b7358f1a0c330468f533e644c09873, type: 2}
 --- !u!1 &2404780652963640884
 GameObject:
   m_ObjectHideFlags: 0

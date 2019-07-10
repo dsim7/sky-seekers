@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0c84dd1188718b45999b3eaa8020e6b, type: 3}
   m_Name: SupportDefensive
   m_EditorClassIdentifier: 
+  positionReq: 1

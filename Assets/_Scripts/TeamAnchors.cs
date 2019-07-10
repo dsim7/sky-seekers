@@ -12,7 +12,7 @@ public class TeamAnchors : MonoBehaviour
     public void AssignAnchors(Team team)
     {
         int numMelee = 0;
-        for (int i = 0; i < team.Characters.Length; i++)
+        for (int i = 0; i < team.Characters.Count; i++)
         {
             if (team.Characters[i].PositionHandler.Position == TeamPosition.Melee)
                 numMelee++;
@@ -39,11 +39,10 @@ public class TeamAnchors : MonoBehaviour
         
         int indexOfMelee = 0;
         int indexOfSupport = 0;
-        for (int i = 0; i < team.Characters.Length; i++)
+        for (int i = 0; i < team.Characters.Count; i++)
         {
             if (team.Characters[i].PositionHandler.Position == TeamPosition.Melee)
             {
-                Debug.Log(team.Characters[i].Mover);
                 team.Characters[i].Mover.Anchor = meleeAnchors[indexOfMelee++];
             }
             else

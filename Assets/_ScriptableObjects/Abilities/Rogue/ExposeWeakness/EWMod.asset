@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 923f07d21c5126a4db79836045bb3b14, type: 3}
+  m_Name: EWMod
+  m_EditorClassIdentifier: 
+  dealtOrReceive: 1
+  damagePercent: 0
+  damageConstant: 4
+  chance: 1
+  damageType: {fileID: 0}
+  mustBeAttack: 1
+  attackType: {fileID: 0}
+  attackMustHit: 1
+  attackMustBeDefended: 0
+  attackMustCrit: 0

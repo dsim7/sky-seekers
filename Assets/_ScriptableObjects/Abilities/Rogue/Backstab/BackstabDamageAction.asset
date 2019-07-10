@@ -18,7 +18,7 @@ MonoBehaviour:
   indexOfPrimaryTarget: 0
   delayToNextAction: 0
   effects:
-  - {fileID: 11400000, guid: 96a3ad7be2891cd4188ed5842bb1621b, type: 2}
+  - {fileID: 11400000, guid: e59f8a51cc2db3348af7e490d3b8b53d, type: 2}
   targetSfxs:
   - {fileID: 11400000, guid: 48de1235cf66f59429673a92d60fe4d4, type: 2}
   casterSfxs: []

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f8bfeec6add62a429d8b5c300852b69, type: 3}
   m_Name: Poison
   m_EditorClassIdentifier: 
-  color: {r: 0.30066842, g: 0.8679245, b: 0.06959773, a: 1}
+  color: {r: 0.21863896, g: 0.8301887, b: 0.17621933, a: 1}

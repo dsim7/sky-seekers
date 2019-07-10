@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f96e43a4eac385e4ca29145248bc142a, type: 3}
+  m_Name: PWPoisonedMod
+  m_EditorClassIdentifier: 
+  attackOrAttacked: 0
+  effectTarget: 1
+  effects:
+  - {fileID: 11400000, guid: 053acbeaf738e794ab9a09f458405f10, type: 2}
+  chance: 1
+  damageType: {fileID: 0}
+  mustBeAttack: 1
+  attackType: {fileID: 0}
+  attackMustHit: 0
+  attackMustBeDefended: 0
+  attackMustCrit: 0
