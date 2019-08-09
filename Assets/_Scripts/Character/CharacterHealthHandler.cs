@@ -35,7 +35,7 @@ public class CharacterHealthHandler : ObservedObject
             {
                 health = 0;
                 Owner.Actor.GetComponent<Animator>().SetTrigger("Dead");
-                Owner.StatusHandler.
+                Owner.StatusHandler.ClearStatuses();
                 if (Owner.PositionHandler.IsLastMelee && Owner.Team.SupportCharacters.Count != 0)
                 {
                     Owner.Team.SupportCharacters[0].PositionHandler.Reposition();
