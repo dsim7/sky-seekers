@@ -10,11 +10,11 @@ public class ModGenModDmg : ModifierGenerator
     [SerializeField]
     DealtOrReceive dealtOrReceive;
     [SerializeField]
-    float damagePercent;
+    float damageScaler = 1f;
     [SerializeField]
-    float damageConstant;
+    float damageConstantScaler;
     [SerializeField]
-    float chance = 1f;
+    float chanceToApply = 1f;
 
     [SerializeField]
     DamageType damageType;
@@ -27,29 +27,33 @@ public class ModGenModDmg : ModifierGenerator
 
     public override ModifierBase GenerateInstance()
     {
-        return new ModDamageReduction(dealtOrReceive, damagePercent, damageConstant, damageType, chance,
-            mustBeAttack, attackType, attackMustHit, attackMustBeDefended, attackMustCrit);
+        return new ModDamageReduction(dealtOrReceive, damageScaler, damageConstantScaler,
+            damageType, chanceToApply,
+            mustBeAttack, attackType, attackMustHit,
+            attackMustBeDefended, attackMustCrit);
     }
 
     class ModDamageReduction : Modifier<DamageInstance>
     {
         DealtOrReceive dealtOrReceive;
-        float damagePercent, damageConstant;
+        float damageScaler, damageConstantScaler;
         DamageType damageType;
-        float chance;
+        float chanceToApply;
 
         bool mustBeAttack;
         AttackType attackType;
         bool attackMustHit, attackMustBeDefended, attackMustCrit;
 
-        public ModDamageReduction(DealtOrReceive dealtOrReceive, float damagePercent, float damageConstant, DamageType damageType, float chance,
-            bool mustBeAttack, AttackType attackType, bool attackMustHit, bool attackMustBeDefended, bool attackMustCrit)
+        public ModDamageReduction(DealtOrReceive dealtOrReceive, float damageScaler, float damageConstantScaler,
+            DamageType damageType, float chanceToApply,
+            bool mustBeAttack, AttackType attackType, bool attackMustHit,
+            bool attackMustBeDefended, bool attackMustCrit)
         {
             this.dealtOrReceive = dealtOrReceive;
             this.damageType = damageType;
-            this.damagePercent = damagePercent;
-            this.damageConstant = damageConstant;
-            this.chance = chance;
+            this.damageScaler = damageScaler;
+            this.damageConstantScaler = damageConstantScaler;
+            this.chanceToApply = chanceToApply;
             this.mustBeAttack = mustBeAttack;
             this.attackType = attackType;
             this.attackMustHit = attackMustHit;
@@ -59,11 +63,11 @@ public class ModGenModDmg : ModifierGenerator
 
         protected override void Modify(DamageInstance instance)
         {
-            if (HelperMethods.CheckChance(chance) && 
+            if (HelperMethods.CheckChance(chanceToApply) && 
                 DetermineApplicable(instance))
             {
-                instance.Amount *= damagePercent;
-                instance.Amount += damageConstant;
+                instance.Amount *= damageScaler;
+                instance.Amount += damageConstantScaler;
                 OriginStatusEffect.RemoveStack();
             }
         }

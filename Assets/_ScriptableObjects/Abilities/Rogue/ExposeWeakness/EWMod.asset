@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: EWMod
   m_EditorClassIdentifier: 
   dealtOrReceive: 1
-  damagePercent: 0
-  damageConstant: 4
-  chance: 1
+  damageScaler: 1
+  damageConstantScaler: 4
+  chanceToApply: 1
   damageType: {fileID: 0}
   mustBeAttack: 1
   attackType: {fileID: 0}

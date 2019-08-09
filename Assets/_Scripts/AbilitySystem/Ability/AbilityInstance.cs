@@ -21,9 +21,13 @@ public class AbilityInstance
     public void Execute()
     {
         OnStart.Invoke();
-        TriggerMods();
+        Caster.EventHandler.CastAbility.Invoke(this);
+        foreach (Character target in Targets)
+        {
+            target.EventHandler.TargetedByAbility.Invoke(this);
+        }
         Ability.Cooldown.StartCD();
-        
+
         List<AbilityActionInstance> actionInsts = GenerateActionInstances();
 
         ActionSeriesExecuter seriesExecuter = new ActionSeriesExecuter();
@@ -38,15 +42,6 @@ public class AbilityInstance
     {
         OnCancel.Invoke();
         isActive = false;
-    }
-
-    void TriggerMods()
-    {
-        Caster.EventHandler.CastAbility.Invoke(this);
-        foreach (Character target in Targets)
-        {
-            target.EventHandler.TargetedByAbility.Invoke(this);
-        }
     }
 
     List<AbilityActionInstance> GenerateActionInstances()

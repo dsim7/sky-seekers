@@ -28,5 +28,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ed220f15768a2eb47be7dd272cb2ce62, type: 2}
   - {fileID: 11400000, guid: 6660c8e512e1b894f9afb769ab3e05f9, type: 2}
   - {fileID: 11400000, guid: bb9581a4a8d10034d96c6d69fb92fd5b, type: 2}
+  - {fileID: 11400000, guid: d9a8cf3216dea9e4a848c0bfb2a22591, type: 2}
   startingActionPoints: 2
   ai: {fileID: 11400000, guid: b833ca7a11e7dfe4bae8e4132b323981, type: 2}

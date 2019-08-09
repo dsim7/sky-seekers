@@ -10,15 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5edd0a8045c5e4b4594b3eb422f0d37b, type: 3}
-  m_Name: EWAction
+  m_Name: BlindAction
   m_EditorClassIdentifier: 
   animationName: Attack
-  isMelee: 1
+  isMelee: 0
   isAoe: 0
   indexOfPrimaryTarget: 0
   delayToNextAction: 0
   effects:
-  - {fileID: 11400000, guid: 3958e6a05f53d3944b39233be9103b97, type: 2}
-  targetSfxs:
-  - {fileID: 11400000, guid: 48de1235cf66f59429673a92d60fe4d4, type: 2}
+  - {fileID: 11400000, guid: 3a74a8ed365a2df4fb73b9c41f51e93c, type: 2}
+  targetSfxs: []
   casterSfxs: []

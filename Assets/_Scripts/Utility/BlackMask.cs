@@ -2,22 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class BlackMask : MonoBehaviour
 {
-    CanvasGroup _cg;
-    CanvasGroup cg { get { if (_cg == null) { _cg = GetComponent<CanvasGroup>(); } return _cg; } set { _cg = value; } }
-
-    float alphaTarget = 0;
-    UnityEvent thenEvent = new UnityEvent();
+    [SerializeField] CanvasGroup cg;
+    [SerializeField] Image img;
+    [SerializeField] [Range(0,1f)] float alphaTarget = 0;
+    [SerializeField] UnityEvent thenEvent = new UnityEvent();
 
     public float fadeRate = 0.5f;
-
-    void Awake()
-    {
-        cg.blocksRaycasts = true;
-    }
 
     void Update()
     {
@@ -40,11 +35,11 @@ public class BlackMask : MonoBehaviour
         if (amount != 0)
         {
             Enable();
-            cg.blocksRaycasts = true;
+            img.raycastTarget = true;
         }
         else
         {
-            cg.blocksRaycasts = false;
+            img.raycastTarget = false;
         }
     }
 
@@ -57,7 +52,7 @@ public class BlackMask : MonoBehaviour
     {
         Enable();
         alphaTarget = 1;
-        cg.blocksRaycasts = true;
+        img.raycastTarget = true;
 
         if (then != null)
         {
@@ -74,7 +69,7 @@ public class BlackMask : MonoBehaviour
     {
         Enable();
         alphaTarget = amount;
-        cg.blocksRaycasts = true;
+        img.raycastTarget = true;
 
         if (then != null)
         {
@@ -91,7 +86,7 @@ public class BlackMask : MonoBehaviour
     {
         Enable();
         alphaTarget = 0;
-        cg.blocksRaycasts = false;
+        img.raycastTarget = false;
 
         if (then != null)
         {

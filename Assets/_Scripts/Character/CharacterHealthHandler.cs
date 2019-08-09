@@ -31,8 +31,19 @@ public class CharacterHealthHandler : ObservedObject
         set
         {
             dead = value;
-            health = dead ? 0 : health;
+            if (dead)
+            {
+                health = 0;
+                Owner.Actor.GetComponent<Animator>().SetTrigger("Dead");
+                Owner.StatusHandler.
+                if (Owner.PositionHandler.IsLastMelee && Owner.Team.SupportCharacters.Count != 0)
+                {
+                    Owner.Team.SupportCharacters[0].PositionHandler.Reposition();
+                }
+            }
+
             Changed();
+
         }
     }
 
@@ -45,6 +56,11 @@ public class CharacterHealthHandler : ObservedObject
 
     public void DealDamage(DamageInstance dmgInst)
     {
+        if (dead)
+        {
+            return;
+        }
+
         Character caster = dmgInst.Dealer;
         Character target = dmgInst.Target;
 
@@ -68,7 +84,6 @@ public class CharacterHealthHandler : ObservedObject
             HelperMethods.CheckChance(caster.CritChance))
         {
             dmgInst.IsCrit = true;
-            Debug.Log("crit");
         }
 
         if (!dmgInst.CannotBeDefended && dmgInst.IsDefended)

@@ -67,4 +67,9 @@ public class CharacterStatusHandler : ObservedObject
     {
         return statuses.FirstOrDefault(status => status.Template == statusTemplate);
     }
+
+    public void ClearStatuses()
+    {
+        statuses.ForEach(s => s.Remove());
+    }
 }

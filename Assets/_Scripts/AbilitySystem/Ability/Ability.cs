@@ -85,7 +85,7 @@ public class Ability
     void ManualTarget(AbilityInstance abilityInstance)
     {
         TargetingController targetingController = abilityInstance.Caster.Team.TargetingController;
-
+        
         targetingController.ChooseNewTargets(Template.Targeting.NumTargetsRequired,
             character => Template.Targeting.SelectTargetCheck(character, abilityInstance),
             targets =>

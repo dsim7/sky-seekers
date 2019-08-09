@@ -52,14 +52,15 @@ public class Character
         CharacterActor actor, CharacterMover mover, CharacterFloatingTextHandler floatingTextHandler)
     {
         Template = templateSlot.Template;
-        Actor = actor;
-        Mover = mover;
-        FloatingTextHandler = floatingTextHandler;
         actor.Owner = this;
         mover.Owner = this;
         floatingTextHandler.Owner = this;
 
         Team = team;
+
+        Actor = actor;
+        Mover = mover;
+        FloatingTextHandler = floatingTextHandler;
 
         ActionPointHandler = new CharacterActionPointHandler(this);
         PositionHandler = new CharacterPositionHandler(this, templateSlot.Position);
@@ -92,11 +93,12 @@ public class Character
     {
         AbilityHandler.ListenToCasting(UpdateAvailability);
         PositionHandler.ListenToIsRepositioning(UpdateAvailability);
+        HealthHandler.RegisterListener(UpdateAvailability);
     }
 
     void UpdateAvailability()
     {
-        bool result = !AbilityHandler.Casting && !PositionHandler.IsRepositioning && active && !Incapacitated;
+        bool result = !AbilityHandler.Casting && !PositionHandler.IsRepositioning && active && !Incapacitated && !HealthHandler.Dead;
         if (result != available.Value)
         {
             available.Value = result;

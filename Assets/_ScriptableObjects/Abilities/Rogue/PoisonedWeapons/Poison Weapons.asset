@@ -16,7 +16,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3ae093768ae468d479fd67527f98b511, type: 2}
   targeting: {fileID: 11400000, guid: ba170c190a16df044838b04314980aba, type: 2}
   cooldown: 5
-  type: {fileID: 11400000, guid: 0b0e9a4ad660a8a4abc68c59d771727e, type: 2}
+  type: {fileID: 11400000, guid: 03d9862c803d395459e6fa0152d00c38, type: 2}
   actionPointCost: 1
   mustBeAbleToReposition: 0
   flags: 0

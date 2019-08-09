@@ -26,9 +26,9 @@ public class AbilityTargeting : ScriptableObject
     public virtual bool SelectTargetCheck(Character selected, AbilityInstance abilityInstance)
     {
         Character caster = abilityInstance.Caster;
-        return selected.Targetable &&
+        return !selected.HealthHandler.Dead &&
             (canSelectAllies || selected.Team != caster.Team) &&
-            (canSelectEnemies || selected.Team == caster.Team) &&
+            (canSelectEnemies && selected.Targetable || selected.Team == caster.Team) &&
             (canSelectMelee || selected.PositionHandler.Position != TeamPosition.Melee) &&
             (canSelectSupport || selected.PositionHandler.Position != TeamPosition.Support) &&
             (!cannotSelectSelf || selected == caster) &&
@@ -42,16 +42,18 @@ public class AbilityTargeting : ScriptableObject
 
         Team casterTeam = caster.Team;
 
-        if (CanSelectAllies)
-        {
-            result.AddRange(casterTeam.Characters);
-        }
         if (CanSelectEnemies)
         {
             result.AddRange(casterTeam.EnemyTeam.Characters);
         }
-
         result.RemoveAll(c => !c.Targetable);
+
+        if (CanSelectAllies)
+        {
+            result.AddRange(casterTeam.Characters);
+        }
+        result.RemoveAll(c => c.HealthHandler.Dead);
+
         if (!CanSelectMelee)
         {
             result.RemoveAll(c => c.PositionHandler.Position == TeamPosition.Melee);
